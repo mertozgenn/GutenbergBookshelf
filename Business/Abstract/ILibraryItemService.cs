@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace Business.Abstract
     {
         IResult AddToLibrary(int bookId, int userId);
         IResult RemoveFromLibrary(int bookId, int userId);
-        IDataResult<List<Book>> GetLibraryItems(int userId);
+        IDataResult<List<LibraryDto>> GetLibraryItems(int userId);
     }
 }

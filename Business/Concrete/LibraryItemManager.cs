@@ -3,6 +3,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,10 +38,10 @@ namespace Business.Concrete
             return new SuccessResult(Messages.BookAdded);
         }
 
-        public IDataResult<List<Book>> GetLibraryItems(int userId)
+        public IDataResult<List<LibraryDto>> GetLibraryItems(int userId)
         {
             var data = _libraryItemDal.GetLibraryItems(userId);
-            return new SuccessDataResult<List<Book>>(data);
+            return new SuccessDataResult<List<LibraryDto>>(data);
         }
 
         public IResult RemoveFromLibrary(int bookId, int userId)

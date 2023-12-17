@@ -6,3 +6,4 @@ global using DataAccess.Abstract;
 global using Entities.Concrete;
 global using Entities.Dtos;
 global using Business.Concrete;
+global using Business.DependencyResolvers.Autofac;

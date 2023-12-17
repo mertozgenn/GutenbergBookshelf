@@ -1,4 +1,5 @@
 ﻿using Core.Abstract.DataAccess;
+using Core.Utilities.Datatable.Entities;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface IBookDal: IEntityRepository<Book>
     {
+        DatatableResult<Book> GetAllDt(DatatableParameterDto datatableParameterDto);
     }
 }

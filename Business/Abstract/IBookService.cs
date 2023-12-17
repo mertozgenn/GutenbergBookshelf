@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Utilities.Datatable.Entities;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Business.Abstract
 {
     public interface IBookService
     {
-        IDataResult<List<Book>> GetAll();
+        IDataResult<DatatableResult<Book>> GetAll(DatatableParameterDto DatatableParameterDto);
         IDataResult<List<Book>> GetBySearchKey(string key);
     }
 }

@@ -14,5 +14,6 @@ namespace Business.Abstract
         User GetByMail(string email);
         void UpdateLastLoginDate(User user);
         IResult Add(UserForRegisterDto userForRegisterDto);
+        User GetById(int id);
     }
 }

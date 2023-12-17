@@ -1,0 +1,121 @@
+﻿@model BrowseModel
+@{
+    Layout = "_Layout";
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">
+            <a class="titlea" href="/">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                    <i class="mdi mdi-library-books"></i>
+                </span>
+                <span>All Books</span>
+            </a>
+        </h3>
+        <div class="d-flex">
+            <form action="/search" method="get">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input placeholder="Search all books" aria-label="Search all books" aria-describedby="basic-addon2"
+                               style="height: 36px; border-radius: 4px 0px 0px 4px;" type="text" class="form-control form-control"
+                               name="key">
+                        <div class="input-group-append">
+                            <button class="btn btn-sm btn-gradient-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Recent Books</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th> Cover </th>
+                                    <th class="titlew"> Title </th>
+                                    <th> Author </th>
+                                    <th> Language </th>
+                                    <th> E-Book No </th>
+                                    <th> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @* @foreach (var item in Model.Books)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img data-original="@item.CoverUrl" class="me-2 lazy" alt="image">
+                                        </td>
+                                        <td> @item.Title </td>
+                                        <td> @item.Author </td>
+                                        <td> @item.Lang </td>
+                                        <td> @item.EbookNo </td>
+                                        <td class="tdw">
+                                            <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
+                                                <i class="mdi mdi-delete-outline"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                } *@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $('.table').DataTable({
+            pageLength: 100,
+            order: [[1, "asc"]],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "library/GetAll",
+                type: "POST",
+                dataSrc: function (x) {
+                    x.draw = x.data.draw;
+                    x.recordsTotal = x.data.recordsTotal;
+                    x.recordsFiltered = x.data.recordsFiltered;
+                    x.error = x.data.error;
+                    return x.data.data
+                },
+            },
+            columns: [
+                { 
+                    name: "CoverUrl",
+                    render: ((data, type, row, meta) => {
+                        return `<img data-original="${row.coverUrl}" class="me-2 lazy" alt="image">`
+                    }),
+                    orderable: false
+                },
+                { name: "Title", data: "title" },
+                { name: "Author", data: "author" },
+                { name: "Lang", data: "lang" },
+                { name: "EbookNo", data: "ebookNo" },
+                {
+                    name: "Action",
+                    render: (data, type, row, meta) => {
+                        return `<button type="button" class="btn btn-primary btn-sm">
+                                                        <i class="mdi mdi-plus-outline"></i>
+                                                        Add To Library
+                                                    </button>`
+                    },
+                    orderable: false
+                },
+            ],
+            drawCallback: function () {
+                $("img.lazy").lazyload();
+            }
+        });
+    </script>
+}
+

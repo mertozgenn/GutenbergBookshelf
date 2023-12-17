@@ -38,6 +38,11 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        public User GetById(int id)
+        {
+            return _userDal.Get(u => u.Id == id);
+        }
+
         public User GetByMail(string email)
         {
             return _userDal.Get(u => u.Email == email);

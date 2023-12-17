@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Datatable;
+using Core.Utilities.Datatable.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,10 +21,10 @@ namespace Business.Concrete
             _bookDal=bookDal;
         }
 
-        public IDataResult<List<Book>> GetAll()
+        public IDataResult<DatatableResult<Book>> GetAll(DatatableParameterDto datatableParameterDto)
         {
-            var data = _bookDal.GetAll();
-            return new SuccessDataResult<List<Book>>(data);
+            var data = _bookDal.GetAllDt(datatableParameterDto);
+            return new SuccessDataResult<DatatableResult<Book>>(data);
         }
 
         public IDataResult<List<Book>> GetBySearchKey(string key)

@@ -1,5 +1,6 @@
 ﻿using Core.Abstract.DataAccess;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface ILibraryItemDal: IEntityRepository<LibraryItem>
     {
-        List<Book> GetLibraryItems(int userId);
+        List<LibraryDto> GetLibraryItems(int userId);
     }
 }
