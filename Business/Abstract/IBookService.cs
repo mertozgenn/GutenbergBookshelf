@@ -11,7 +11,7 @@ namespace Business.Abstract
 {
     public interface IBookService
     {
-        IDataResult<DatatableResult<Book>> GetAll(DatatableParameterDto DatatableParameterDto);
-        IDataResult<List<Book>> GetBySearchKey(string key);
+        IDataResult<DatatableResult<Book>> GetAll(DatatableParameterDto? datatableParameterDto = null);
+        IDataResult<DatatableResult<Book>> GetBySearchKey(string key, DatatableParameterDto? datatableParameterDto = null);
     }
 }

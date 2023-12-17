@@ -19,7 +19,7 @@
                     <div class="input-group">
                         <input placeholder="Search all books" aria-label="Search all books" aria-describedby="basic-addon2"
                                style="height: 36px; border-radius: 4px 0px 0px 4px;" type="text" class="form-control form-control"
-                               name="key">
+                               name="key" required>
                         <div class="input-group-append">
                             <button class="btn btn-sm btn-gradient-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
                         </div>
@@ -28,6 +28,12 @@
             </form>
         </div>
     </div>
+    @if (!string.IsNullOrWhiteSpace(Model.Message))
+    {
+        <div class="alert alert-info" role="alert">
+            @Model.Message
+        </div>
+    }
     <div class="row">
         <div class="col-12 grid-margin">
             <div class="card">
@@ -69,9 +75,11 @@
                                             </div>
                                         </td>
                                         <td class="tdw">
-                                            <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                                                <i class="mdi mdi-delete-outline"></i>
-                                            </button>
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <a href="/Library/RemoveFromLibrary?bookId=@item.Id" class="btn btn-outline-secondary btn-rounded btn-icon d-flex align-items-center justify-content-center">
+                                                    <i class="mdi mdi-delete-outline"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 }

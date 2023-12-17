@@ -13,10 +13,21 @@ namespace DataAccess.Concrete
 {
     public class EfBookDal : EfEntityRepositoryBase<Book, Context>, IBookDal
     {
-        public DatatableResult<Book> GetAllDt(DatatableParameterDto datatableParameterDto)
+        public DatatableResult<Book> GetAllDt(DatatableParameterDto? datatableParameterDto = null)
         {
             using (Context context = new Context())
             {
+                if (datatableParameterDto == null)
+                {
+                    var list = context.Books.ToList();
+                    return new DatatableResult<Book>
+                    {
+                        Draw = 0,
+                        RecordsTotal = list.Count,
+                        RecordsFiltered = list.Count,
+                        Data = list,
+                    };
+                }
                 var data = context.Books.AsQueryable();
                 int recordsTotal = data.Count();
                 // Search

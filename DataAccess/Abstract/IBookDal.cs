@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface IBookDal: IEntityRepository<Book>
     {
-        DatatableResult<Book> GetAllDt(DatatableParameterDto datatableParameterDto);
+        DatatableResult<Book> GetAllDt(DatatableParameterDto? datatableParameterDto = null);
     }
 }

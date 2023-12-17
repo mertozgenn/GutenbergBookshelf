@@ -28,14 +28,22 @@ namespace UI.Controllers
         [Route("search")]
         public IActionResult Search(string key)
         {
-            var result = _bookService.GetBySearchKey(key);
             SearchResultModel searchResultModel = new SearchResultModel()
             {
-                Books = result.Data != null ? result.Data : new List<Book>(),
-                Message = result.Message,
                 SearchKey = key
             };
             return View(searchResultModel);
+        }
+
+        [HttpPost]
+        public IActionResult Search([FromForm]DatatableParameterDto datatableParameter, [FromQuery] string key)
+        {
+            var result = _bookService.GetBySearchKey(key, datatableParameter);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [Route("browse")]
@@ -55,7 +63,7 @@ namespace UI.Controllers
             return BadRequest(result);
         }
 
-        public IActionResult AddToLibrary(int bookId)
+        public IActionResult AddToLibrary([FromQuery]int bookId)
         {
             var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
             int userId = int.Parse(userIdClaim.Value);
@@ -63,7 +71,7 @@ namespace UI.Controllers
             return GetLibraryView(result.Message);
         }
 
-        public IActionResult RemoveFromLibrary(int bookId)
+        public IActionResult RemoveFromLibrary([FromQuery]int bookId)
         {
             var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
             int userId = int.Parse(userIdClaim.Value);
@@ -81,7 +89,7 @@ namespace UI.Controllers
                 Books = result.Data != null ? result.Data : new List<LibraryDto>(),
                 Message = $"{result.Message} {message}"
             };
-            return View(libraryModel);
+            return View("Library", libraryModel);
         }
     }
 }

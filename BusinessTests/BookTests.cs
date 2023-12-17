@@ -15,7 +15,7 @@ namespace GutenbergTests
             Assert.IsNotNull(data);
             Assert.AreEqual(true, data.Success);
             Assert.IsNotNull(data.Data);
-            Assert.AreEqual(true, data.Data.Count > 70_000);
+            Assert.AreEqual(true, data.Data.Data.Count > 70_000);
         }
 
         [TestMethod]
@@ -26,7 +26,7 @@ namespace GutenbergTests
             Assert.IsNotNull(data);
             Assert.AreEqual(true, data.Success);
             Assert.IsNotNull(data.Data);
-            Assert.AreEqual(true, data.Data.Count >= 36708);
+            Assert.AreEqual(true, data.Data.Data.Count >= 36708);
         }
     }
 }
