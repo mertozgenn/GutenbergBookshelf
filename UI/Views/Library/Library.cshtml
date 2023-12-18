@@ -63,9 +63,11 @@
                                 {
                                     <tr>
                                         <td>
-                                            <img src="@item.CoverUrl" class="me-2" alt="image">
+                                            <a href="/book/@item.Id">
+                                                <img src="@item.CoverUrl" class="me-2" alt="image">
+                                            </a>
                                         </td>
-                                        <td> @item.Title </td>
+                                        <td><a href="/book/@item.Id">@item.Title </a></td>
                                         <td> @item.Author </td>
                                         <td> @item.Lang </td>
                                         <td> @item.EbookNo </td>
@@ -91,4 +93,11 @@
         </div>
     </div>
 </div>
-
+@section scripts {
+    <script>
+        var perfEntries = performance.getEntriesByType("navigation");
+        if (perfEntries[0].type === "back_forward") {
+            location.reload();
+        }
+    </script>
+}

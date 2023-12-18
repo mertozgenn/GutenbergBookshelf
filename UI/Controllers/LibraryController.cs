@@ -36,7 +36,7 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search([FromForm]DatatableParameterDto datatableParameter, [FromQuery] string key)
+        public IActionResult Search([FromForm] DatatableParameterDto datatableParameter, [FromQuery] string key)
         {
             var result = _bookService.GetBySearchKey(key, datatableParameter);
             if (result.Success)
@@ -63,7 +63,7 @@ namespace UI.Controllers
             return BadRequest(result);
         }
 
-        public IActionResult AddToLibrary([FromQuery]int bookId)
+        public IActionResult AddToLibrary([FromQuery] int bookId)
         {
             var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
             int userId = int.Parse(userIdClaim.Value);
@@ -71,7 +71,7 @@ namespace UI.Controllers
             return GetLibraryView(result.Message);
         }
 
-        public IActionResult RemoveFromLibrary([FromQuery]int bookId)
+        public IActionResult RemoveFromLibrary([FromQuery] int bookId)
         {
             var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
             int userId = int.Parse(userIdClaim.Value);
@@ -90,6 +90,36 @@ namespace UI.Controllers
                 Message = $"{result.Message} {message}"
             };
             return View("Library", libraryModel);
+        }
+
+        [Route("book/{bookId}")]
+        public IActionResult ReadBook(int bookId)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+            int userId = int.Parse(userIdClaim.Value);
+            var result = _bookService.GetById(bookId);
+            var contentResult = _bookService.GetBookContent(bookId);
+            var progressResult = _libraryItemService.GetProgress(bookId, userId);
+            ReadBookModel readBookModel = new ReadBookModel()
+            {
+                Book = result.Data,
+                BookContent = contentResult.Data,
+                Progress = progressResult.Data
+            };
+            return View(readBookModel);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProgress([FromQuery] int bookId, [FromQuery] int progress)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+            int userId = int.Parse(userIdClaim.Value);
+            var result = _libraryItemService.UpdateProgress(bookId, userId, progress);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

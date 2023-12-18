@@ -13,5 +13,7 @@ namespace Business.Abstract
     {
         IDataResult<DatatableResult<Book>> GetAll(DatatableParameterDto? datatableParameterDto = null);
         IDataResult<DatatableResult<Book>> GetBySearchKey(string key, DatatableParameterDto? datatableParameterDto = null);
+        IDataResult<Book> GetById(int id);
+        IDataResult<string> GetBookContent(int id);
     }
 }

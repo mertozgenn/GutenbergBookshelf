@@ -44,6 +44,16 @@ namespace Business.Concrete
             return new SuccessDataResult<List<LibraryDto>>(data);
         }
 
+        public IDataResult<byte> GetProgress(int bookId, int userId)
+        {
+            var data = _libraryItemDal.Get(l => l.BookId == bookId && l.UserId == userId);
+            if (data == null)
+            {
+                return new ErrorDataResult<byte>(Messages.BookNotFound);
+            }
+            return new SuccessDataResult<byte>(data.Progress);
+        }
+
         public IResult RemoveFromLibrary(int bookId, int userId)
         {
             var data = _libraryItemDal.Get(l => l.BookId == bookId && l.UserId == userId);
@@ -53,6 +63,18 @@ namespace Business.Concrete
             }
             _libraryItemDal.Delete(data);
             return new SuccessResult(Messages.BookRemoved);
+        }
+
+        public IResult UpdateProgress(int bookId, int userId, int progress)
+        {
+            var data = _libraryItemDal.Get(l => l.BookId == bookId && l.UserId == userId);
+            if (data == null)
+            {
+                return new ErrorResult(Messages.BookNotFound);
+            }
+            data.Progress = (byte)progress;
+            _libraryItemDal.Update(data);
+            return new SuccessResult();
         }
     }
 }

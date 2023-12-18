@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Business.Urils;
 using Core.Utilities.Datatable;
 using Core.Utilities.Datatable.Entities;
 using Core.Utilities.Results;
@@ -25,6 +27,31 @@ namespace Business.Concrete
         {
             var data = _bookDal.GetAllDt(datatableParameterDto);
             return new SuccessDataResult<DatatableResult<Book>>(data);
+        }
+
+        public IDataResult<string> GetBookContent(int id)
+        {
+            var book = _bookDal.Get(b => b.Id == id);
+            if (book == null || book.ContentUrl == null)
+            {
+                return new ErrorDataResult<string>(Messages.BookNotFound);
+            }
+            try
+            {
+                var apiResult = RestsharpHelper.Get<string>(book.ContentUrl.Replace("https", "http"), "");
+                return new SuccessDataResult<string>(apiResult);
+            }
+            catch (Exception)
+            {
+                return new ErrorDataResult<string>(Messages.BookNotFound);
+            }
+
+        }
+
+        public IDataResult<Book> GetById(int id)
+        {
+            var data = _bookDal.Get(b => b.Id == id);
+            return new SuccessDataResult<Book>(data);
         }
 
         public IDataResult<DatatableResult<Book>> GetBySearchKey(string searchKey, DatatableParameterDto datatableParameterDto)

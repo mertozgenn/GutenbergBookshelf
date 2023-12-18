@@ -1,0 +1,57 @@
+﻿@model ReadBookModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Gutenberg</title>
+    <base href="https://www.gutenberg.org/cache/epub/@Model.Book.EbookNo/">
+</head>
+<body>
+    <iframe id="bookContent" style="width:100%; height:100vh" frameborder="0" srcdoc="@Model.BookContent">
+    </iframe>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            function throttle(fn, wait) {
+                var time = Date.now();
+                return function () {
+                    if ((time + wait - Date.now()) < 0) {
+                        fn();
+                        time = Date.now();
+                    }
+                }
+            }
+
+            function updateProgress() {
+                var scrollPercent = 100 * $('#bookContent').contents().scrollTop() / ($('#bookContent').contents().height() - $('#bookContent').height());
+                //console.log(Math.ceil(scrollPercent));
+                var base_url = window.location.origin;
+                $.ajax({
+                    url: base_url + "/library/updateprogress?bookId=@Model.Book.Id&progress=" + Math.ceil(scrollPercent),
+                    type: "POST",
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+
+            $('#bookContent').contents().find("a").click(function (e) {
+                e.preventDefault();
+                var href = $(this).attr("href");
+                // scroll to the element inside iframe when a link is clicked
+                $('#bookContent').contents().find(href).get(0).scrollIntoView();
+            });
+
+            // on iframe load, scroll to the last saved scroll position
+            let progress = @Model.Progress;
+            if (progress > 0) {
+                $('#bookContent').contents().scrollTop(($('#bookContent').contents().height() - $('#bookContent').height()) * progress / 100);
+            }
+
+            // on iframe scroll, update scroll progress
+            $('#bookContent').contents().scroll(updateProgress);
+        });
+    </script>
+</body>
+</html>
