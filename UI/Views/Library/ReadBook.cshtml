@@ -10,10 +10,12 @@
 <body>
     <iframe id="bookContent" style="width:100%; height:100vh" frameborder="0" srcdoc="@Model.BookContent">
     </iframe>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
     <script>
-        $(document).ready(function () {
-            function throttle(fn, wait) {
+        $(function () {
+            const throttle = (fn, wait) => {
                 var time = Date.now();
                 return function () {
                     if ((time + wait - Date.now()) < 0) {
@@ -23,7 +25,7 @@
                 }
             }
 
-            function updateProgress() {
+            const updateProgress = () => {
                 var scrollPercent = 100 * $('#bookContent').contents().scrollTop() / ($('#bookContent').contents().height() - $('#bookContent').height());
                 //console.log(Math.ceil(scrollPercent));
                 var base_url = window.location.origin;
@@ -35,23 +37,23 @@
                     }
                 });
             }
+            // on iframe scroll, update scroll progress
+            $('#bookContent').contents().scroll(throttle(updateProgress, 500));
 
-            $('#bookContent').contents().find("a").click(function (e) {
-                e.preventDefault();
-                var href = $(this).attr("href");
-                // scroll to the element inside iframe when a link is clicked
-                $('#bookContent').contents().find(href).get(0).scrollIntoView();
-            });
+            setTimeout(function () {
+                $('#bookContent').contents().find("a").click(function (e) {
+                    e.preventDefault();
+                    var href = $(this).attr("href");
+                    // scroll to the element inside iframe when a link is clicked
+                    $('#bookContent').contents().find(href).get(0).scrollIntoView();
+                });
+            }, 1000);
 
             // on iframe load, scroll to the last saved scroll position
-            let progress = @Model.Progress;
-            if (progress > 0) {
-                $('#bookContent').contents().scrollTop(($('#bookContent').contents().height() - $('#bookContent').height()) * progress / 100);
-            }
-
-            // on iframe scroll, update scroll progress
-            $('#bookContent').contents().scroll(updateProgress);
-        });
+            setTimeout(function () {
+                $('#bookContent').contents().scrollTop(($('#bookContent').contents().height() - $('#bookContent').height()) * @Model.Progress / 100);
+            }, 1000);
+        })
     </script>
 </body>
 </html>

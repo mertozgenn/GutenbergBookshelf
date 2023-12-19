@@ -20,6 +20,7 @@ namespace UI.Controllers
         }
 
         [Route("")]
+        [ResponseCache(NoStore = true, Duration = 0)]
         public IActionResult Library()
         {
             return GetLibraryView();
