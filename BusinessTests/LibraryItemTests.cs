@@ -16,6 +16,7 @@ namespace GutenbergTests
             var data = libraryItemService.AddToLibrary(0, 0);
             Assert.IsNotNull(data);
             Assert.AreEqual(true, data.Success);
+            Assert.AreEqual(Messages.BookAdded, data.Message);
             libraryItemService.RemoveFromLibrary(0, 0);
         }
 
@@ -51,6 +52,7 @@ namespace GutenbergTests
             var data = libraryItemService.RemoveFromLibrary(0, 0);
             Assert.IsNotNull(data);
             Assert.AreEqual(true, data.Success);
+            Assert.AreEqual(Messages.BookRemoved, data.Message);
         }
 
         [TestMethod]
